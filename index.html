@@ -11,6 +11,11 @@
       overflow: hidden;
       background: black;
     }
+
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+
     #welcomeScreen {
       position: fixed;
       top: 0; left: 0;
@@ -28,11 +33,7 @@
       cursor: pointer;
       outline: none;
     }
-    #welcomeImage:focus,
-    #welcomeImage:active {
-      outline: none;
-    }
-    #gif {
+    #gif, #gif2 {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -45,22 +46,8 @@
       background: black;
       opacity: 0;
       transition: opacity 3s ease;
+      z-index: 2; /* فوق الجيف */
       pointer-events: none;
-      z-index: 1;
-    }
-    #startImage {
-      position: fixed;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
-      max-width: 600px;
-      opacity: 0;
-      transition: opacity 4s ease, transform 4s ease;
-      z-index: 2;
-      pointer-events: none;
-    }
-    #startImage.show {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
     }
     #hiddenButton {
       position: fixed;
@@ -78,10 +65,6 @@
     #hiddenButton.show {
       display: block;
     }
-    #hiddenButton:focus,
-    #hiddenButton:active {
-      outline: none;
-    }
   </style>
 </head>
 <body>
@@ -92,38 +75,47 @@
     <img id="welcomeImage" src="https://raw.githubusercontent.com/vmmvee/jpg/main/Picsart_25-04-24_12-03-22-120.jpg" alt="Click to start">
   </div>
 
+  <!-- الجيف الأول -->
   <img id="gif" src="https://raw.githubusercontent.com/vmmvee/1-august-gf-day-4-her/main/exspiravit%20void%20adl%C4%B1%20kullan%C4%B1c%C4%B1n%C4%B1n%20Cartoon%20sketch%20%26%20animated%20panosundaki%20Pin%202025.gif" alt="GIF">
 
-  <div id="overlay"></div>
+  <!-- الجيف الثاني مع زر start -->
+  <img id="gif2" src="https://raw.githubusercontent.com/vmmvee/1-august-gf-day-4-her/main/0813.gif" alt="GIF 2">
 
-  <img id="startImage" src="https://raw.githubusercontent.com/vmmvee/1-august-gf-day-4-her/main/Screenshot%202025-08-13%20003648%20(1).png" alt="Button">
+  <div id="overlay"></div>
 
   <button id="hiddenButton" onclick="window.location.href='display.html'"></button>
 
   <script>
     const gif = document.getElementById('gif');
+    const gif2 = document.getElementById('gif2');
     const overlay = document.getElementById('overlay');
-    const startImage = document.getElementById('startImage');
     const hiddenButton = document.getElementById('hiddenButton');
     const music = document.getElementById('bgMusic');
     const welcomeScreen = document.getElementById('welcomeScreen');
-    const gifDuration = 8;
-    const fadeDuration = 3;
+
+    const gifDuration = 8; // مدة الجيف الأول بالثواني
+    const fadeDuration = 3; // مدة الانتقال للسواد
 
     document.getElementById('welcomeImage').addEventListener('click', () => {
       music.play();
       welcomeScreen.style.opacity = 0;
+
+      // إظهار الجيف الأول
       setTimeout(() => {
         welcomeScreen.style.display = 'none';
         gif.style.display = 'block';
       }, 1500);
+
+      // قبل ما الجيف الأول يخلص بثانيتين، ابدأ الفيد للسواد
       setTimeout(() => {
-        overlay.style.opacity = 1;
+        overlay.style.opacity = 1; // سواد تدريجي
         setTimeout(() => {
-          startImage.classList.add('show');
+          gif.style.display = 'none';
+          overlay.style.opacity = 0; // شيل السواد عشان يظهر الجيف الثاني
+          gif2.style.display = 'block';
           hiddenButton.classList.add('show');
         }, fadeDuration * 1000);
-      }, (gifDuration + 1) * 1000);
+      }, (gifDuration - 2) * 1000); // ابدأ قبل النهاية بثانيتين
     });
   </script>
 </body>
